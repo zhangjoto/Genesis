@@ -101,7 +101,8 @@ class Protocol(ABC):
                         headers = parse_headers(result)
                         logging.debug(f"Recived headers: {headers}")
 
-                        if "Content-Length" in headers:
+                        # Content-Length in event for BACKGROUND_JOB including body
+                        if "Content-Length" in headers and headers["Event-Name"] != "BACKGROUND_JOB":
                             length = int(headers["Content-Length"])
                             logging.debug(f"Read more {length} bytes.")
                             data = await self.reader.readexactly(length)
